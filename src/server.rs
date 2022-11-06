@@ -17,13 +17,13 @@ impl Server {
         let listener = TcpListener::bind(&self.addr).unwrap();
 
         loop {
-            let res = listener.accept();
-            
-            if res.is_err() {
-                continue;
-            }
 
-            let (stream, addr) = res.unwrap();
+            match listener.accept() {
+                Ok((stream, _)) => {
+                    print!("OK");
+                },
+                Err(e) => println!("Failed to establish a connection: {}", e),
+            }
         }
     }
 }
