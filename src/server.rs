@@ -1,7 +1,7 @@
-use std::net::TcpListener;
-use std::io::Read;
 use crate::http::Request;
 use std::convert::TryFrom;
+use std::io::Read;
+use std::net::TcpListener;
 
 pub struct Server {
     addr: String,
@@ -9,9 +9,7 @@ pub struct Server {
 
 impl Server {
     pub fn new(addr: String) -> Self {
-        Self {
-            addr
-        }
+        Self { addr }
     }
 
     pub fn run(self) {
@@ -20,7 +18,6 @@ impl Server {
         let listener = TcpListener::bind(&self.addr).unwrap();
 
         loop {
-
             match listener.accept() {
                 Ok((mut stream, _)) => {
                     let mut buffer = [0; 1024];
@@ -28,16 +25,15 @@ impl Server {
                         Ok(_) => {
                             println!("Received a request: {}", String::from_utf8_lossy(&buffer));
                             match Request::try_from(&buffer[..]) {
-                                Ok(Request) => {},
-                                Err(e) => println!("Failed to parse a request: {}", e), 
+                                Ok(Request) => {}
+                                Err(e) => println!("Failed to parse a request: {}", e),
                             }
-                        },
+                        }
                         Err(e) => println!("Failed to read from connection: {}", e),
                     }
-                },
+                }
                 Err(e) => println!("Failed to establish a connection: {}", e),
             }
         }
     }
 }
-
