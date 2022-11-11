@@ -9,3 +9,8 @@ pub enum Value<'buf> {
     Multiple(Vec<&'buf str>),
 }
 
+impl<'buf> QueryString<'buf> {
+    pub fn get(&self, key: &str) -> Option<&Value> {
+        self.data.get(key)
+    }
+}
