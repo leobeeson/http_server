@@ -28,9 +28,12 @@ impl Server {
                                 Ok(request) => {
                                     dbg!(request);
                                     let response = Response::new(StatusCode::NotFound, Some("<h1> IT WORKS!!! </h1>".to_string()));
-                                    write!(stream, "{}", response);
+                                    response.send(&mut stream);
                                 }
-                                Err(e) => println!("Failed to parse a request: {}", e),
+                                Err(e) => {
+                                  println!("Failed to parse a request: {}", e);
+                                  Response::new(StatusCode::BadRequest, None).send(&mut stream);
+                                }
                             }
                         }
                         Err(e) => println!("Failed to read from connection: {}", e),
